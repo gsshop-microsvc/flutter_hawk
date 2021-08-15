@@ -31,8 +31,6 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     mContext = flutterPluginBinding.applicationContext
-
-    print("---1111---")
     Hawk.init(mContext).build()
 
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_hawk")
@@ -45,16 +43,12 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
       var key: String? = call.argument("key")
 
       try {
-        print("---hawk 2222---")
         if (key != null ){
-          print("---hawk 3333---" + key)
+          value = Hawk.get(key)
         }
-        value = Hawk.get(key)
-        print("---hawk 444---" + value)
       } catch(e: Exception) {
         print(e.localizedMessage)
       }
-
       result.success(value)
     } else {
       result.notImplemented()
