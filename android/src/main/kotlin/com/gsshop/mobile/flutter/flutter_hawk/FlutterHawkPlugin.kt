@@ -74,6 +74,21 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
         result.success(false)
       }
       result.success(true)
+    } else if (call.method == "put") {
+      var key: String? = call.argument("key")
+      var value: String? = call.argument("value")
+
+      try {
+        if (key != null ){
+          Hawk.put(key, value)
+        } else {
+          result.success(false)
+        }
+      } catch(e: Exception) {
+        print(e.localizedMessage)
+        result.success(false)
+      }
+      result.success(true)
     } else {
       result.notImplemented()
     }
