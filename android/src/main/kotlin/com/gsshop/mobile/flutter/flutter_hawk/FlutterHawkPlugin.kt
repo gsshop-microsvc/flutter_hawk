@@ -46,51 +46,47 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "get") {
-      var value: String = ""
-      var key: String? = call.argument("key")
-
-      try {
-        if (key != null ){
-          value = Hawk.get(key)
-        } else {
-
+    when (call.method) {
+      "get" -> {
+        val key = call.argument<String>("key")
+        try {
+          val value = key?.let { Hawk.get<String>(it) } ?: ""
+          result.success(value)
+        } catch(e: Exception) {
+          e.localizedMessage?.let { println(it) }
+          result.success("")
         }
-      } catch(e: Exception) {
-        print(e.localizedMessage)
       }
-      result.success(value)
-    } else if (call.method == "delete") {
-      var key: String? = call.argument("key")
-
-      try {
-        if (key != null ){
-          Hawk.delete(key)
-        } else {
+      "delete" -> {
+        val key = call.argument<String>("key")
+        try {
+          if (key != null) {
+            Hawk.delete(key)
+            result.success(true)
+          } else {
+            result.success(false)
+          }
+        } catch(e: Exception) {
+          e.localizedMessage?.let { println(it) }
           result.success(false)
         }
-      } catch(e: Exception) {
-        print(e.localizedMessage)
-        result.success(false)
       }
-      result.success(true)
-    } else if (call.method == "put") {
-      var key: String? = call.argument("key")
-      var value: String? = call.argument("value")
-
-      try {
-        if (key != null ){
-          Hawk.put(key, value)
-        } else {
+      "put" -> {
+        val key = call.argument<String>("key")
+        val value = call.argument<String>("value")
+        try {
+          if (key != null) {
+            Hawk.put(key, value)
+            result.success(true)
+          } else {
+            result.success(false)
+          }
+        } catch(e: Exception) {
+          e.localizedMessage?.let { println(it) }
           result.success(false)
         }
-      } catch(e: Exception) {
-        print(e.localizedMessage)
-        result.success(false)
       }
-      result.success(true)
-    } else {
-      result.notImplemented()
+      else -> result.notImplemented()
     }
   }
 
