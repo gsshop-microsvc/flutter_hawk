@@ -11,7 +11,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.BinaryMessenger
-import io.flutter.plugin.common.PluginRegistry.Registrar
+//import io.flutter.plugin.common.PluginRegistry.Registrar
 import com.orhanobut.hawk.Hawk
 
 /** FlutterHawkPlugin */
@@ -22,16 +22,16 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
   private var mContext: Context? = null
-  private var registrar: Registrar? = null
+//  private var registrar: Registrar? = null
 
-  companion object {
-    @JvmStatic
-    fun registerWith(registrar: Registrar) {
-      val instance = FlutterHawkPlugin()
-      instance.registrar = registrar
-      instance.onAttachedToEngine(registrar.context(), registrar.messenger())
-    }
-  }
+//  companion object {
+//    @JvmStatic
+//    fun registerWith(registrar: Registrar) {
+//      val instance = FlutterHawkPlugin()
+//      instance.registrar = registrar
+//      instance.onAttachedToEngine(registrar.context(), registrar.messenger())
+//    }
+//  }
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     onAttachedToEngine(flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
