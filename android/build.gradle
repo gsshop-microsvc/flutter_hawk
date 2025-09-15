@@ -47,5 +47,5 @@ dependencies {
     implementation('com.orhanobut:hawk:2.0.1') { 
         exclude group: 'com.facebook.conceal', module: 'conceal' 
     }
-    implementation files('libs/conceal-1.1.3-16kb.aar') 
+    // implementation files('libs/conceal-1.1.3-16kb.aar') 
 }
