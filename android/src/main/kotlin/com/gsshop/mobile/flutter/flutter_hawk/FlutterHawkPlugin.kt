@@ -12,7 +12,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.BinaryMessenger
 //import io.flutter.plugin.common.PluginRegistry.Registrar
-import com.orhanobut.hawk.Hawk
+// import com.orhanobut.hawk.Hawk
 
 /** FlutterHawkPlugin */
 class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
@@ -38,8 +38,8 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
   }
 
   private fun onAttachedToEngine(applicationContext: Context, binaryMessenger: BinaryMessenger) {
-    mContext = applicationContext
-    Hawk.init(mContext).build()
+  //  mContext = applicationContext
+  //  Hawk.init(mContext).build()
 
     channel = MethodChannel(binaryMessenger, "flutter_hawk")
     channel.setMethodCallHandler(this)
@@ -50,8 +50,9 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
       "get" -> {
         val key = call.argument<String>("key")
         try {
-          val value = key?.let { Hawk.get<String>(it) } ?: ""
-          result.success(value)
+       //   val value = key?.let { Hawk.get<String>(it) } ?: ""
+       //   result.success(value)
+        result.success("")
         } catch(e: Exception) {
           e.localizedMessage?.let { println(it) }
           result.success("")
@@ -61,7 +62,7 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
         val key = call.argument<String>("key")
         try {
           if (key != null) {
-            Hawk.delete(key)
+        //    Hawk.delete(key)
             result.success(true)
           } else {
             result.success(false)
@@ -76,7 +77,7 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
         val value = call.argument<String>("value")
         try {
           if (key != null) {
-            Hawk.put(key, value)
+            //Hawk.put(key, value)
             result.success(true)
           } else {
             result.success(false)
