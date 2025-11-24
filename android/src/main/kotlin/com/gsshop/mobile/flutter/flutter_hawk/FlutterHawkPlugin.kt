@@ -11,7 +11,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.BinaryMessenger
-import io.flutter.plugin.common.PluginRegistry.Registrar
+//import io.flutter.plugin.common.PluginRegistry.Registrar
 import com.orhanobut.hawk.Hawk
 
 /** FlutterHawkPlugin */
@@ -22,16 +22,16 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
   private var mContext: Context? = null
-  private var registrar: Registrar? = null
+//  private var registrar: Registrar? = null
 
-  companion object {
-    @JvmStatic
-    fun registerWith(registrar: Registrar) {
-      val instance = FlutterHawkPlugin()
-      instance.registrar = registrar
-      instance.onAttachedToEngine(registrar.context(), registrar.messenger())
-    }
-  }
+//  companion object {
+//    @JvmStatic
+//    fun registerWith(registrar: Registrar) {
+//      val instance = FlutterHawkPlugin()
+//      instance.registrar = registrar
+//      instance.onAttachedToEngine(registrar.context(), registrar.messenger())
+//    }
+//  }
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     onAttachedToEngine(flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
@@ -46,51 +46,47 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "get") {
-      var value: String = ""
-      var key: String? = call.argument("key")
-
-      try {
-        if (key != null ){
-          value = Hawk.get(key)
-        } else {
-
+    when (call.method) {
+      "get" -> {
+        val key = call.argument<String>("key")
+        try {
+          val value = key?.let { Hawk.get<String>(it) } ?: ""
+          result.success(value)
+        } catch(e: Exception) {
+          e.localizedMessage?.let { println(it) }
+          result.success("")
         }
-      } catch(e: Exception) {
-        print(e.localizedMessage)
       }
-      result.success(value)
-    } else if (call.method == "delete") {
-      var key: String? = call.argument("key")
-
-      try {
-        if (key != null ){
-          Hawk.delete(key)
-        } else {
+      "delete" -> {
+        val key = call.argument<String>("key")
+        try {
+          if (key != null) {
+            Hawk.delete(key)
+            result.success(true)
+          } else {
+            result.success(false)
+          }
+        } catch(e: Exception) {
+          e.localizedMessage?.let { println(it) }
           result.success(false)
         }
-      } catch(e: Exception) {
-        print(e.localizedMessage)
-        result.success(false)
       }
-      result.success(true)
-    } else if (call.method == "put") {
-      var key: String? = call.argument("key")
-      var value: String? = call.argument("value")
-
-      try {
-        if (key != null ){
-          Hawk.put(key, value)
-        } else {
+      "put" -> {
+        val key = call.argument<String>("key")
+        val value = call.argument<String>("value")
+        try {
+          if (key != null) {
+            Hawk.put(key, value)
+            result.success(true)
+          } else {
+            result.success(false)
+          }
+        } catch(e: Exception) {
+          e.localizedMessage?.let { println(it) }
           result.success(false)
         }
-      } catch(e: Exception) {
-        print(e.localizedMessage)
-        result.success(false)
       }
-      result.success(true)
-    } else {
-      result.notImplemented()
+      else -> result.notImplemented()
     }
   }
 
