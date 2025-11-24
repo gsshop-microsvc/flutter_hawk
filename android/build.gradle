@@ -2,7 +2,7 @@ group 'com.gsshop.mobile.flutter.flutter_hawk'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '2.1.0'
+    ext.kotlin_version = '1.8.0'
     repositories {
         google()
         jcenter()
@@ -44,8 +44,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // implementation "com.orhanobut:hawk:2.0.1"
     // implementation 'com.github.calm:hawk:v2.1.0-16kb'
-    implementation('com.orhanobut:hawk:2.0.1') { 
-        exclude group: 'com.facebook.conceal', module: 'conceal' 
-    }
+    // implementation('com.orhanobut:hawk:2.0.1') { 
+    //     exclude group: 'com.facebook.conceal', module: 'conceal' 
+    // }
     // implementation files('libs/conceal-1.1.3-16kb.aar') 
 }
