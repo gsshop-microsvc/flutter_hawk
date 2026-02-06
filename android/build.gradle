@@ -44,6 +44,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // calm/hawk 16kb-support 포크 — Android 16KB 페이지 크기 대응 (Conceal 포함)
     // https://github.com/calm/hawk/tree/16kb-support
-    implementation 'com.github.gsshop-microsvc:hawk:v2.1.0-16kb'
+    implementation 'com.github.gsshop-microsvc:hawk:v2.1.4-16kb'
 
 }
