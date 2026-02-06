@@ -15,7 +15,7 @@ import io.flutter.plugin.common.BinaryMessenger
 import com.orhanobut.hawk.Hawk
 
 /** Kotlin 구현 — GeneratedPluginRegistrant(Java) 호환을 위해 FlutterHawkPlugin.java가 이 클래스를 상속 */
-class FlutterHawkPluginImpl : FlutterPlugin, MethodCallHandler {
+open class FlutterHawkPluginImpl : FlutterPlugin, MethodCallHandler {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
