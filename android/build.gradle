@@ -2,17 +2,15 @@ group 'com.gsshop.mobile.flutter.flutter_hawk'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '2.1.0'
     repositories {
         google()
         jcenter()
         mavenCentral()
-		maven { url 'https://jitpack.io' }
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.2.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -26,22 +24,17 @@ rootProject.allprojects {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 android {
     namespace = 'com.gsshop.mobile.flutter.flutter_hawk'
     compileSdkVersion 30
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
     defaultConfig {
         minSdkVersion 16
     }
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation("com.orhanobut:hawk:2.0.1") {
         exclude group: "com.facebook.conceal", module: "conceal"
     }
