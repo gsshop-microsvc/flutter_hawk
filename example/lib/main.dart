@@ -28,7 +28,10 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion = await FlutterHawk.get('key') ?? 'No found key';
+      platformVersion = await FlutterHawk.get('key');
+      if (platformVersion.isEmpty) {
+        platformVersion = 'No found key';
+      }
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
