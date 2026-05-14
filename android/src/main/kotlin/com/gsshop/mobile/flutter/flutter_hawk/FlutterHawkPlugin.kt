@@ -22,6 +22,7 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
   private var mContext: Context? = null
+  private var migrationHelper: ConcealMigrationHelper? = null
 //  private var registrar: Registrar? = null
 
 //  companion object {
@@ -40,6 +41,7 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
   private fun onAttachedToEngine(applicationContext: Context, binaryMessenger: BinaryMessenger) {
     mContext = applicationContext
     Hawk.init(mContext).build()
+    migrationHelper = try { ConcealMigrationHelper(applicationContext) } catch (e: Exception) { null }
 
     channel = MethodChannel(binaryMessenger, "flutter_hawk")
     channel.setMethodCallHandler(this)
@@ -50,8 +52,11 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
       "get" -> {
         val key = call.argument<String>("key")
         try {
-          val value = key?.let { Hawk.get<String>(it) } ?: ""
-          result.success(value)
+          var value = key?.let { Hawk.get<String>(it) }
+          if (value == null && key != null) {
+            value = migrationHelper?.tryMigrate(key)
+          }
+          result.success(value ?: "")
         } catch(e: Exception) {
           e.localizedMessage?.let { println(it) }
           result.success("")
@@ -92,5 +97,6 @@ class FlutterHawkPlugin: FlutterPlugin, MethodCallHandler {
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)
+    migrationHelper = null
   }
 }

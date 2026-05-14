@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /Users/gsr/flutter/flutter_hawk/tasks)",
+      "Read(//private/tmp/conceal_analysis/**)",
+      "Bash(unzip -o conceal-b.aar -d conceal-b-unpacked)",
+      "Bash(jar tf *)",
+      "Bash(javap -c -p b_classes/com/facebook/android/crypto/keychain/SharedPrefsBackedKeyChain.class)",
+      "Bash(javap -c -p aprime_classes/com/facebook/android/crypto/keychain/SharedPrefsBackedKeyChain.class)",
+      "Bash(javap -c -p aprime_classes/com/facebook/crypto/util/SystemNativeCryptoLibrary.class)",
+      "Bash(javap -c -p b_classes/com/facebook/crypto/util/SystemNativeCryptoLibrary.class)",
+      "Bash(javap -verbose -p aprime_classes/com/facebook/crypto/util/SystemNativeCryptoLibrary.class)",
+      "Bash(javap -verbose -p b_classes/com/facebook/crypto/util/SystemNativeCryptoLibrary.class)",
+      "Bash(javap -verbose -p aprime_classes/com/facebook/crypto/util/SystemNativeCryptoLibrary\\\\$1.class)",
+      "Bash(javap -verbose -p b_classes/com/facebook/crypto/util/SystemNativeCryptoLibrary\\\\$1.class)",
+      "Bash(javap -verbose -p aprime_classes/com/facebook/crypto/CryptoConfig.class)",
+      "Bash(javap -verbose -p b_classes/com/facebook/crypto/CryptoConfig.class)",
+      "Bash(javap -c -p aprime_classes/com/facebook/android/crypto/keychain/AndroidConceal.class)",
+      "Bash(javap -c -p b_classes/com/facebook/android/crypto/keychain/AndroidConceal.class)",
+      "Bash(javap -c -verbose -p aprime_classes/com/facebook/crypto/VersionCodes.class)",
+      "Bash(javap -c -verbose -p b_classes/com/facebook/crypto/VersionCodes.class)"
+    ],
+    "additionalDirectories": [
+      "/Users/gsr/flutter/flutter_hawk"
+    ]
+  }
+}
