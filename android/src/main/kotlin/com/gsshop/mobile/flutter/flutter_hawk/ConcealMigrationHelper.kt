@@ -76,6 +76,7 @@ internal class ConcealMigrationHelper(context: Context) {
 
         return try {
             Hawk.put(key, value)
+            hawkPrefs.edit().remove(key).apply()
             markAttempted(key)
             value
         } catch (e: Exception) {
