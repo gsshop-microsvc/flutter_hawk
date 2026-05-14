@@ -1,18 +1,23 @@
 package com.gsshop.mobile.flutter.flutter_hawk
 
 import android.content.Context
+import android.util.Base64
 import com.google.gson.Gson
 import com.orhanobut.hawk.Hawk
 
 // TODO: remove after next major release — migrates Hawk data that was stored without Conceal
 // encryption. The intermediate B build (com.github.GundamD:conceal:v1.1.3-16kb-fixed-3) had no
-// .so bundled, so Hawk fell back to NoEncryption and stored values as "java.lang.String@@\"val\"".
+// .so bundled, so Hawk fell back to NoEncryption.
+//
+// Hawk2 serialized format (HawkSerializer):
+//   "<keyClassName>#<valueClassName>#<dataType>V@<cipherText>"
+// NoEncryption cipherText = Base64(gsonJson.getBytes())   ← NOT plaintext
+// SharedPreferences file name = "Hawk2"  (HawkBuilder.STORAGE_TAG_DO_NOT_CHANGE)
 internal class ConcealMigrationHelper(context: Context) {
 
-    // Hawk's default SharedPreferences file name (SharedPreferencesStorage.HAWK)
-    private val hawkPrefs = context.getSharedPreferences("HAWK", Context.MODE_PRIVATE)
+    private val hawkPrefs = context.getSharedPreferences("Hawk2", Context.MODE_PRIVATE)
 
-    // Each attempted key is stored as a boolean entry; presence = attempted (success or fail).
+    // Each attempted key stored as a boolean entry; presence = attempted (success or fail).
     private val attemptedPrefs = context.getSharedPreferences(
         "flutter_hawk_migration_v1", Context.MODE_PRIVATE
     )
@@ -20,9 +25,9 @@ internal class ConcealMigrationHelper(context: Context) {
     private val gson = Gson()
 
     /**
-     * Tries to read [key] from B's NoEncryption storage and re-write it to the current
+     * Reads [key] from B's NoEncryption-formatted Hawk storage and re-writes it to the current
      * Conceal-encrypted Hawk. Returns the migrated value on success, null otherwise.
-     * After the first attempt (success or fail), the key is recorded so it is never retried.
+     * Each key is attempted exactly once regardless of outcome.
      */
     fun tryMigrate(key: String): String? {
         if (attemptedPrefs.contains(key)) return null
@@ -33,14 +38,32 @@ internal class ConcealMigrationHelper(context: Context) {
             return null
         }
 
-        // NoEncryption format written by Hawk's DataUtil: "<className>@@<gsonJson>"
-        val sepIdx = rawValue.indexOf("@@")
-        if (sepIdx < 0 || rawValue.substring(0, sepIdx) != "java.lang.String") {
+        // Format: "<keyClass>#<valueClass>#<dataType>V@<cipherText>"
+        // Split with limit=3 so the base64 payload is never split even if it contained '#'
+        val parts = rawValue.split("#", limit = 3)
+        if (parts.size < 3 || parts[0] != "java.lang.String") {
             markAttempted(key)
             return null
         }
 
-        val json = rawValue.substring(sepIdx + 2)
+        // parts[2] = "<dataType>V@<cipherText>", e.g. "0V@ImhlbGxvIg=="
+        val typeAndCipher = parts[2]
+        val atIdx = typeAndCipher.indexOf('@')
+        if (atIdx < 0) {
+            markAttempted(key)
+            return null
+        }
+        val cipherText = typeAndCipher.substring(atIdx + 1)
+
+        // NoEncryption: cipherText = Base64(gsonJson.getBytes())
+        val jsonBytes = try {
+            Base64.decode(cipherText, Base64.DEFAULT)
+        } catch (e: Exception) {
+            markAttempted(key)
+            return null
+        }
+        val json = String(jsonBytes)
+
         val value = try {
             gson.fromJson(json, String::class.java)
         } catch (e: Exception) {

@@ -18,7 +18,11 @@
       "Bash(javap -c -p aprime_classes/com/facebook/android/crypto/keychain/AndroidConceal.class)",
       "Bash(javap -c -p b_classes/com/facebook/android/crypto/keychain/AndroidConceal.class)",
       "Bash(javap -c -verbose -p aprime_classes/com/facebook/crypto/VersionCodes.class)",
-      "Bash(javap -c -verbose -p b_classes/com/facebook/crypto/VersionCodes.class)"
+      "Bash(javap -c -verbose -p b_classes/com/facebook/crypto/VersionCodes.class)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -L \"https://repo1.maven.org/maven2/com/orhanobut/hawk/2.0.1/hawk-2.0.1-sources.jar\" -o hawk-sources.jar)",
+      "Bash(mkdir -p hawk_src)",
+      "Bash(jar xf *)"
     ],
     "additionalDirectories": [
       "/Users/gsr/flutter/flutter_hawk"
