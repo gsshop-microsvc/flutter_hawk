@@ -42,10 +42,9 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    // implementation "com.orhanobut:hawk:2.0.1"
-    // implementation 'com.github.calm:hawk:v2.1.0-16kb'
-    implementation('com.orhanobut:hawk:2.0.1') { 
-        exclude group: 'com.facebook.conceal', module: 'conceal' 
+    // Hawk transitive Conceal(4KB .so) 제외 → 플러그인이 아래 AAR로만 Conceal 고정 (호스트 앱 Gradle에 의존하지 않음)
+    implementation('com.orhanobut:hawk:2.0.1') {
+        exclude group: 'com.facebook.conceal', module: 'conceal'
     }
-    // implementation files('libs/conceal-1.1.3-16kb.aar') 
+    implementation files("${projectDir}/libs/conceal-1.1.3-16kb.aar")
 }
